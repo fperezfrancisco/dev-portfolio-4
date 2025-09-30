@@ -14,14 +14,12 @@ const MainHeader = () => {
   const lastY = React.useRef(
     typeof window !== "undefined" ? window.scrollY : 0
   );
-  const [atTop, setAtTop] = React.useState(
-    typeof window !== "undefined" ? window.scrollY === 0 : true
-  );
+  // default to true on the server to match server-rendered HTML.
+  // we'll sync with the real scroll position in an effect after mount.
+  const [atTop, setAtTop] = React.useState(true);
   const inactivityTimer = React.useRef(null);
   const hoverRef = React.useRef(false);
-  const [isNarrow, setIsNarrow] = React.useState(
-    typeof window !== "undefined" ? window.innerWidth < 800 : false
-  );
+
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -70,6 +68,12 @@ const MainHeader = () => {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+
+    // run once on mount to sync client state with current scroll position
+    // (keeps the initial client render identical to server-rendered HTML,
+    // avoiding hydration mismatches)
+    onScroll();
+
     return () => {
       window.removeEventListener("scroll", onScroll);
       clearInactivity();
@@ -77,6 +81,7 @@ const MainHeader = () => {
   }, []);
 
   // watch viewport width for the 800px breakpoint
+  /*
   React.useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(max-width: 799px)");
@@ -89,7 +94,7 @@ const MainHeader = () => {
       if (mq.removeEventListener) mq.removeEventListener("change", handler);
       else mq.removeListener(handler);
     };
-  }, []);
+  }, []);*/
 
   // lock body scrolling when sidebar is open
   React.useEffect(() => {
@@ -102,26 +107,25 @@ const MainHeader = () => {
     };
   }, [sidebarOpen]);
 
+  // build tailwind classes for background & backdrop filter
+  const mobileBgClasses =
+    !atTop && !sidebarOpen
+      ? "bg-[#121212] backdrop-blur-[6px] backdrop-saturate-[120%]"
+      : "bg-transparent";
+  const desktopBgClasses =
+    visible && !atTop
+      ? "min-[800px]:bg-[#121212] min-[800px]:backdrop-blur-[6px] min-[800px]:backdrop-saturate-[120%]"
+      : "min-[800px]:bg-transparent";
+
+  const headerClasses = `fixed h-20 w-full px-4 md:px-8 py-4 z-40 flex items-center justify-between transition-transform transition-opacity duration-[280ms] ease-in-out ${
+    visible
+      ? "translate-y-0 opacity-100 min-[800px]:translate-y-0"
+      : "translate-y-0 min-[800px]:translate-y-[-100%] min-[800px]:opacity-0"
+  } ${mobileBgClasses} ${desktopBgClasses}`;
+
   return (
     <header
-      className="fixed h-20 w-full px-4 md:px-8 py-4 z-40  flex items-center justify-between"
-      style={{
-        transform: isNarrow
-          ? "translateY(0)"
-          : visible
-          ? "translateY(0)"
-          : "translateY(-100%)",
-        opacity: isNarrow ? 1 : visible ? 1 : 0,
-        transition: "transform 280ms ease, opacity 280ms ease",
-        background: (
-          isNarrow ? !atTop && sidebarOpen === false : visible && !atTop
-        )
-          ? "#121212"
-          : "transparent",
-        backdropFilter: (isNarrow ? !atTop : visible && !atTop)
-          ? "saturate(120%) blur(6px)"
-          : "none",
-      }}
+      className={headerClasses}
       onMouseEnter={() => {
         hoverRef.current = true;
         setVisible(true);
@@ -138,142 +142,137 @@ const MainHeader = () => {
         }
       }}
     >
-      <span className="px-3 py-1 font-extrabold text-lg border-4 border-[var(--accent)] text-[var(--accent)] rounded-sm">
-        F
+      <span className="px-3 py-1 font-extrabold text-lg border-4 border-[var(--accent)] text-[var(--accent)] rounded-sm cursor-pointer hover:text-white hover:border-white transition-colors duration-300 ease-out">
+        <a href="#/">F</a>
       </span>
 
       {/* Narrow: show menu open button */}
-      {isNarrow && !sidebarOpen && (
-        <button
-          aria-label="Open menu"
-          onClick={() => setSidebarOpen(true)}
-          className="p-2"
-          style={{
-            color: "var(--accent)",
-            marginLeft: "auto",
-            zIndex: 60,
-            background: "transparent",
-            border: "none",
-          }}
-        >
-          <Menu className="size-6 hover:text-white" />
-        </button>
-      )}
+
+      <button
+        aria-label="Open menu"
+        onClick={() => setSidebarOpen(true)}
+        className={`p-2 block min-[800px]:hidden ${
+          sidebarOpen ? "hidden" : "block min[800px]:hidden"
+        }`}
+        style={{
+          color: "var(--accent)",
+          marginLeft: "auto",
+          zIndex: 60,
+          background: "transparent",
+          border: "none",
+        }}
+      >
+        <Menu className="size-6 hover:text-white" />
+      </button>
 
       {/* Desktop / wide nav */}
-      {!isNarrow && (
-        <nav>
-          <ul>
-            {navItems.map((item) => (
-              <li key={item.href} className="inline-block ml-6 cursor-pointer">
-                <a
-                  href={item.href}
-                  className="text-sm font-medium text-[var(--text-light)] hover:text-[var(--accent)] transition hover:underline underline-offset-12 decoration-2 underline-color-[var(--accent)] cursor-pointer"
-                >
-                  {item.title}
-                </a>
-              </li>
-            ))}
-            <li className="inline-block ml-12 cursor-pointer px-4 py-1 border-2 border-[var(--accent)] text-[var(--accent)] hover:text-white rounded-sm hover:bg-[var(--accent)] transition">
+
+      <nav className="hidden min-[800px]:block">
+        <ul>
+          {navItems.map((item) => (
+            <li key={item.href} className="inline-block ml-6 cursor-pointer">
               <a
-                href="#"
-                className="text-sm font-medium transition cursor-pointer"
+                href={item.href}
+                className="text-sm font-medium text-[var(--text-light)] hover:text-[var(--accent)] transition hover:underline underline-offset-12 decoration-2 underline-color-[var(--accent)] cursor-pointer"
               >
-                Resume
+                {item.title}
               </a>
             </li>
-          </ul>
-        </nav>
-      )}
+          ))}
+          <li className="inline-block ml-12 cursor-pointer px-4 py-1 border-2 border-[var(--accent)] text-[var(--accent)] hover:text-white rounded-sm hover:border-white transition-colors duration-300 ease-out">
+            <a href="#" className="text-sm font-medium cursor-pointer">
+              Resume
+            </a>
+          </li>
+        </ul>
+      </nav>
 
       {/* Narrow / mobile header: show menu icon */}
-      {isNarrow && (
-        <>
+
+      <>
+        <div
+          className="fixed block min-[800px]:hidden inset-0 w-screen h-screen"
+          aria-hidden={!sidebarOpen}
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            background: "rgba(0,0,0,0.5)",
+            zIndex: 48,
+            opacity: sidebarOpen ? 1 : 0,
+            transition: "opacity 300ms ease",
+            pointerEvents: sidebarOpen ? "auto" : "none",
+            willChange: "opacity",
+          }}
+        />
+
+        <aside
+          role="dialog"
+          aria-label="Main menu"
+          aria-hidden={!sidebarOpen}
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            height: "100vh",
+            minHeight: "800px",
+            width: 320,
+
+            background: "#121212",
+            zIndex: 50,
+            display: "flex",
+            flexDirection: "column",
+            transform: sidebarOpen ? "translateX(0)" : "translateX(100%)",
+            transition: "transform 400ms cubic-bezier(.2,.9,.2,1)",
+            boxShadow: sidebarOpen ? "-20px 0 60px rgba(0,0,0,0.6)" : "none",
+            willChange: "transform",
+          }}
+          className="p-4 py-8 block min-[800px]:hidden"
+        >
           <div
-            aria-hidden={!sidebarOpen}
-            onClick={() => setSidebarOpen(false)}
             style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(0,0,0,0.5)",
-              zIndex: 48,
-              opacity: sidebarOpen ? 1 : 0,
-              transition: "opacity 300ms ease",
-              pointerEvents: sidebarOpen ? "auto" : "none",
-              willChange: "opacity",
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
             }}
-          />
+          >
+            <button
+              aria-label="Close menu"
+              onClick={() => setSidebarOpen(false)}
+              style={{ color: "var(--accent)" }}
+            >
+              <X className="size-6 hover:text-white" />
+            </button>
+          </div>
 
-          <aside
-            role="dialog"
-            aria-label="Main menu"
-            aria-hidden={!sidebarOpen}
+          <nav
             style={{
-              position: "fixed",
-              top: 0,
-              right: 0,
-              height: "100vh",
-              minHeight: "800px",
-              width: 320,
-
-              background: "#121212",
-              zIndex: 50,
+              marginTop: 24,
               display: "flex",
               flexDirection: "column",
-              transform: sidebarOpen ? "translateX(0)" : "translateX(100%)",
-              transition: "transform 400ms cubic-bezier(.2,.9,.2,1)",
-              boxShadow: sidebarOpen ? "-20px 0 60px rgba(0,0,0,0.6)" : "none",
-              willChange: "transform",
+              gap: 16,
             }}
-            className="p-4 py-8"
+            className="px-2 mt-6 flex flex-col gap-4"
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
-              }}
-            >
-              <button
-                aria-label="Close menu"
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
                 onClick={() => setSidebarOpen(false)}
-                style={{ color: "var(--accent)" }}
+                className="text-base font-medium hover:text-[var(--accent)] transition hover:underline underline-offset-8 decoration-2 underline-color-[var(--accent)]    "
               >
-                <X className="size-6 hover:text-white" />
-              </button>
-            </div>
+                {item.title}
+              </a>
+            ))}
 
-            <nav
-              style={{
-                marginTop: 24,
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-              }}
-              className="px-2 mt-6 flex flex-col gap-4"
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="px-4 py-2 border-2 border-[var(--accent)] text-[var(--accent)] rounded-sm"
+              style={{ marginTop: 12, background: "transparent" }}
             >
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setSidebarOpen(false)}
-                  className="text-base font-medium hover:text-[var(--accent)] transition hover:underline underline-offset-8 decoration-2 underline-color-[var(--accent)]    "
-                >
-                  {item.title}
-                </a>
-              ))}
-
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="px-4 py-2 border-2 border-[var(--accent)] text-[var(--accent)] rounded-sm"
-                style={{ marginTop: 12, background: "transparent" }}
-              >
-                Resume
-              </button>
-            </nav>
-          </aside>
-        </>
-      )}
+              Resume
+            </button>
+          </nav>
+        </aside>
+      </>
     </header>
   );
 };

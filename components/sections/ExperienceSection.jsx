@@ -52,7 +52,10 @@ const ExperienceSection = () => {
   const [selectedExp, setSelectedExp] = useState(0);
 
   return (
-    <section className="w-full max-w-[1000px] mx-auto py-16" id="experience">
+    <section
+      className="w-full max-w-[800px] xl:max-w-[1000px] mx-auto py-16"
+      id="experience"
+    >
       <div className="w-full flex items-center gap-6 mb-12">
         <h2 className="text-2xl md:text-3xl font-semibold tracking-tighter leading-tight min-w-fit">
           Experience

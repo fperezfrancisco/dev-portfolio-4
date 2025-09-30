@@ -28,6 +28,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Smooth scrolling for in-page anchor navigation */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Accent helper */
 .accent {
   color: var(--accent);
