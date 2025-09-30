@@ -1,26 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --background: #121212;
+  --foreground: #ffffff;
+  --accent: #faa307;
+  /* --font-sans will be provided by the Next font import (as a CSS variable)
+     e.g. the layout will add a class that defines --font-sans. */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* keep the same dark background, but allow system to override if desired */
+    --background: #121212;
+    --foreground: #ffffff;
   }
 }
 
+/* Accessible utilities */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Accent helper */
+.accent {
+  color: var(--accent);
+}
+
+/* Button reset that uses the accent color */
+.btn-accent {
+  background: var(--accent);
+  color: #000000;
+  border: none;
+}
+
+/*
+.hero-gradient {
+  
+  background: linear-gradient(
+    180deg,
+    rgba(18, 18, 18, 0) 0%,
+    rgba(250, 163, 7, 0.5) 80%,
+    rgba(18, 18, 18, 0) 100%
+  );
+
+  filter: blur(25px);
+}*/
