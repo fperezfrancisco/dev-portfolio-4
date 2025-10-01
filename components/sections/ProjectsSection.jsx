@@ -1,5 +1,5 @@
 "use client";
-import { ChevronRight, X } from "lucide-react";
+import { ArrowUpRightSquareIcon, ChevronRight, X } from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "motion/react";
 
@@ -22,13 +22,24 @@ const DetailsModal = ({ project, closeModal }) => {
           <h3 className="text-2xl font-semibold leading-tight">
             {project.name}
           </h3>
-          <ul className="mt-4 py-2 z-0 w-full p-4 pl-6 space-y-4">
-            {project.bullets.map((para, index) => (
+          <div className="mt-4 py-2 z-0 w-full p-4  space-y-4">
+            {/**
+               * {project.bullets.map((para, index) => (
               <li key={index} className="text-sm list-disc">
                 {para}
               </li>
             ))}
-          </ul>
+               */}
+            <p className="text-sm">{project.details}</p>
+            <a
+              target="_blank"
+              href={project.liveUrl}
+              className="text-white hover:text-[var(--accent)] flex items-center gap-2 text-sm font-medium mt-4"
+            >
+              Live Url
+              <ArrowUpRightSquareIcon className="size-4" />
+            </a>
+          </div>
           <ul className="w-full flex flex-wrap gap-2  mt-4 items-center z-0">
             {project.techStack.map((tech, index) => (
               <li
@@ -61,22 +72,45 @@ const MobileProject = ({ project }) => {
       transition={{ duration: 0.5, delay: 0.1 }}
     >
       <div className="aspect-[3/2] w-full h-full p-4 relative flex flex-col items-start justify-end tracking-tight">
-        <div className="aspect-[3/2] w-full h-auto rounded-2xl bg-amber-500/50 -z-0 absolute top-0 left-0 right-0"></div>
+        {" "}
+        <a target="_blank" href={project.liveUrl} className="w-full h-full">
+          <div className="aspect-[3/2] w-full h-auto rounded-2xl bg-amber-500/50   -z-0 absolute top-0 left-0 right-0">
+            {" "}
+            <div className="w-full absolute inset-0 h-full rounded-2xl bg-linear-180 from-[var(--accent)]/50 to-black z-0 hover:from-[var(--accent)]/0 transition-all duration-300 ease-out"></div>
+            {project.imageUrl && (
+              <img
+                src={project.imageUrl}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+            )}
+          </div>
+        </a>
         <div className="flex flex-col items-start z-0">
-          <h2 className="text-sm font-medium text-[var(--accent)] leading-tight">
+          <h2 className="text-sm font-medium text-[var(--accent)] leading-tight shadow-2xl">
             Featured Project
           </h2>
-          <h3 className="text-2xl font-semibold leading-tight">
+          <h3 className="text-2xl font-semibold leading-tight shadow-2xl">
             {project.name}
           </h3>
         </div>
-        <ul className="mt-4 py-8 z-0 w-full p-6 pl-8 bg-[#1e1e1e] rounded-2xl hidden flex-col gap-2 sm:flex">
-          {project.bullets.map((para, index) => (
-            <li key={index} className="text-sm list-disc">
-              {para}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-4 py-8 z-0 w-full p-6 bg-[#1e1e1e] rounded-2xl hidden flex-col gap-2 sm:flex">
+          {/**
+               *  {project.bullets.map((para, index) => (
+              <li key={index} className="text-sm list-disc">
+                {para}
+              </li>
+            ))}
+             */}
+          <p className="text-sm">{project.details}</p>
+          <a
+            target="_blank"
+            href={project.liveUrl}
+            className="text-white hover:text-[var(--accent)] flex items-center gap-2 text-sm font-medium mt-4"
+          >
+            Live Url
+            <ArrowUpRightSquareIcon className="size-4" />
+          </a>
+        </div>
         <div
           onClick={() => setModalOpen(true)}
           className="w-full mt-4 p-4 bg-[#1e1e1e] rounded-2xl flex items-center justify-between sm:hidden z-0 cursor-pointer hover:text-[var(--accent)]"
@@ -116,13 +150,23 @@ const DesktopProject = ({ project }) => {
           project.id % 2 === 0 ? "items-start" : "items-end"
         } justify-center tracking-tight`}
       >
-        <div
-          className={`aspect-[3/2] w-full max-w-[600px] max-h-[400px] h-auto rounded-2xl bg-amber-500/50 -z-0 absolute top-0 bottom-0 my-auto ${
-            project.id % 2 != 0
-              ? "left-0 right-[unset]"
-              : "right-0 left-[unset]"
-          }`}
-        ></div>
+        <a target="_blank" href={project.liveUrl} className="w-full h-full">
+          <div
+            className={`aspect-[3/2] cursor-pointer w-full max-w-[600px] max-h-[400px] h-auto rounded-2xl bg-amber-500/50 -z-0 absolute top-0 bottom-0 my-auto ${
+              project.id % 2 != 0
+                ? "left-0 right-[unset]"
+                : "right-0 left-[unset]"
+            }`}
+          >
+            <div className="w-full absolute inset-0 h-full rounded-2xl bg-[var(--accent)]/50 z-0 hover:bg-transparent transition-all duration-300 ease-out"></div>
+            {project.imageUrl && (
+              <img
+                src={project.imageUrl}
+                className="w-full h-full object-cover rounded-2xl"
+              />
+            )}
+          </div>
+        </a>
         <div
           className={`flex flex-col ${
             project.id % 2 === 0 ? "items-start" : "items-end"
@@ -135,13 +179,24 @@ const DesktopProject = ({ project }) => {
             {project.name}
           </h3>
         </div>
-        <ul className="mt-4 py-8 z-0 w-full max-w-[600px] p-6 pl-8 bg-[#1e1e1e] shadow-2xl rounded-2xl hidden flex-col gap-2 sm:flex">
-          {project.bullets.map((para, index) => (
+        <div className="mt-4 py-8 z-0 w-full max-w-[600px] p-4 bg-[#1e1e1e] shadow-2xl rounded-2xl hidden flex-col gap-2 sm:flex">
+          {/**
+             *  {project.bullets.map((para, index) => (
             <li key={index} className="text-sm list-disc">
               {para}
             </li>
           ))}
-        </ul>
+             */}
+          <p className="text-sm">{project.details}</p>
+          <a
+            target="_blank"
+            href={project.liveUrl}
+            className="text-white hover:text-[var(--accent)] flex items-center gap-2 text-sm font-medium mt-4"
+          >
+            Live Url
+            <ArrowUpRightSquareIcon className="size-4" />
+          </a>
+        </div>
         <ul className="hidden sm:flex flex-wrap gap-2 mt-4 items-center z-0">
           {project.techStack.map((tech, index) => (
             <li
@@ -163,6 +218,8 @@ const ProjectsSection = () => {
       id: 1,
       name: "FitForge App",
       featured: true,
+      details:
+        "Designed and developed a full-stack fitness app with user authentication, workout creation, and progress tracking. Started as a web project and expanding to mobile using React Native. Comming soon!",
       bullets: [
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
@@ -178,6 +235,8 @@ const ProjectsSection = () => {
       id: 2,
       name: "Trilogy Soccer Online Academy",
       featured: true,
+      details:
+        "Built a full-stack e-learning platform for a soccer academy, featuring user authentication, course management, and video streaming. Developed with React.js, Node.js, Express, and MongoDB.",
       bullets: [
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
@@ -193,15 +252,24 @@ const ProjectsSection = () => {
       id: 3,
       name: "LASC Youth Club Website",
       featured: true,
+      details:
+        "Designed and developed a fully responsive, professional website for a youth soccer club serving 200+ families. Built using Next Js, Tailwind css, & integrating Strapi CMS for content management. Hosted on vercel & render.",
       bullets: [
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
       ],
-      techStack: ["Next.js", "React native", "Node", "Express", "Mongo Db"],
-      imageUrl: "",
+      techStack: [
+        "Next.js",
+        "Tailwind CSS",
+        "Strapi CMS",
+        "Cloudinary",
+        "Render",
+        "Vercel",
+      ],
+      imageUrl: "/images/lasc-thumbnail.png",
       imageUrlSmall: "",
-      liveUrl: "",
+      liveUrl: "https://lasc-website.vercel.app/",
       githubUrl: "",
     },
   ];
@@ -216,7 +284,7 @@ const ProjectsSection = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         //animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
       >
         <div className="w-full flex items-center gap-6 mb-12">
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tighter leading-tight min-w-fit">

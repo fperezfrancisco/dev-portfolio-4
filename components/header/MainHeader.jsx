@@ -185,7 +185,11 @@ const MainHeader = () => {
               </li>
             ))}
             <li className="inline-block ml-12 cursor-pointer px-4 py-1 border-2 border-[var(--accent)] text-[var(--accent)] hover:text-white rounded-sm hover:border-white transition-colors duration-300 ease-out">
-              <a href="#" className="text-sm font-medium cursor-pointer">
+              <a
+                href="/FranciscoPerez-Fullstack-resume.pdf"
+                target="_blank"
+                className="text-sm font-medium cursor-pointer"
+              >
                 Resume
               </a>
             </li>
@@ -269,13 +273,19 @@ const MainHeader = () => {
               </a>
             ))}
 
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="px-4 py-2 border-2 border-[var(--accent)] text-[var(--accent)] rounded-sm"
-              style={{ marginTop: 12, background: "transparent" }}
+            <a
+              href="/FranciscoPerez-Fullstack-resume.pdf"
+              target="_blank"
+              className="text-sm font-medium cursor-pointer"
             >
-              Resume
-            </button>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="px-4 py-2 border-2 border-[var(--accent)] text-[var(--accent)] rounded-sm"
+                style={{ marginTop: 12, background: "transparent" }}
+              >
+                Resume
+              </button>
+            </a>
           </nav>
         </aside>
       </>
