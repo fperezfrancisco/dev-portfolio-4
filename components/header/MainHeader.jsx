@@ -1,6 +1,7 @@
 "use client";
 import { Menu, X } from "lucide-react";
 import React from "react";
+import { motion } from "motion/react";
 
 const MainHeader = () => {
   const navItems = [
@@ -143,7 +144,7 @@ const MainHeader = () => {
       }}
     >
       <span className="px-3 py-1 font-extrabold text-lg border-4 border-[var(--accent)] text-[var(--accent)] rounded-sm cursor-pointer hover:text-white hover:border-white transition-colors duration-300 ease-out">
-        <a href="#/">F</a>
+        <a href="#">F</a>
       </span>
 
       {/* Narrow: show menu open button */}
@@ -166,26 +167,31 @@ const MainHeader = () => {
       </button>
 
       {/* Desktop / wide nav */}
-
-      <nav className="hidden min-[800px]:block">
-        <ul>
-          {navItems.map((item) => (
-            <li key={item.href} className="inline-block ml-6 cursor-pointer">
-              <a
-                href={item.href}
-                className="text-sm font-medium text-[var(--text-light)] hover:text-[var(--accent)] transition hover:underline underline-offset-12 decoration-2 underline-color-[var(--accent)] cursor-pointer"
-              >
-                {item.title}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.75, delay: 0.05 }}
+      >
+        <nav className="hidden min-[800px]:block">
+          <ul>
+            {navItems.map((item) => (
+              <li key={item.href} className="inline-block ml-6 cursor-pointer">
+                <a
+                  href={item.href}
+                  className="text-sm font-medium text-[var(--text-light)] hover:text-[var(--accent)] transition hover:underline underline-offset-12 decoration-2 underline-color-[var(--accent)] cursor-pointer"
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+            <li className="inline-block ml-12 cursor-pointer px-4 py-1 border-2 border-[var(--accent)] text-[var(--accent)] hover:text-white rounded-sm hover:border-white transition-colors duration-300 ease-out">
+              <a href="#" className="text-sm font-medium cursor-pointer">
+                Resume
               </a>
             </li>
-          ))}
-          <li className="inline-block ml-12 cursor-pointer px-4 py-1 border-2 border-[var(--accent)] text-[var(--accent)] hover:text-white rounded-sm hover:border-white transition-colors duration-300 ease-out">
-            <a href="#" className="text-sm font-medium cursor-pointer">
-              Resume
-            </a>
-          </li>
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      </motion.div>
 
       {/* Narrow / mobile header: show menu icon */}
 

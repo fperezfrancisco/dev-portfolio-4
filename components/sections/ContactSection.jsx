@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import { motion } from "motion/react";
 
 const ContactSection = () => {
   return (
@@ -7,22 +9,47 @@ const ContactSection = () => {
       id="contact"
     >
       <div className="w-full flex flex-col items-center text-center tracking-tight">
-        <h2 className="text-4xl md:text-5xl font-bold my-4">
-          Let's Get in Touch!
-        </h2>
-        <p className="text-center max-w-[450px] mt-4">
-          If you’re interested in collaborating or hiring me for your project,
-          send me a message so we can connect. I am currently open for new
-          opportunities!
-        </p>
-        <a
-          href="mailto:fperezfrancisco4@gmail.com"
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          //animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <h2 className="text-4xl md:text-5xl font-bold my-4">
+            Let's Get in Touch!
+          </h2>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          //animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.75 }}
+        >
+          <p className="text-center max-w-[450px] mt-4">
+            If you’re interested in collaborating or hiring me for your project,
+            send me a message so we can connect. I am currently open for new
+            opportunities!
+          </p>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          //animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
           className="w-full max-w-[350px]"
         >
-          <button className="mt-8 w-full max-w-[350px] h-14 rounded-lg bg-[#121212] text-white hover:bg-[var(--accent)] transition-colors duration-300 ease-out cursor-pointer">
-            Send a Message
-          </button>
-        </a>
+          <a
+            href="mailto:fperezfrancisco4@gmail.com"
+            className="w-full max-w-[350px]"
+          >
+            <button className="mt-8 w-full max-w-[350px] h-14 rounded-lg bg-[#121212] text-white hover:bg-[var(--accent)] transition-colors duration-300 ease-out cursor-pointer">
+              Send a Message
+            </button>
+          </a>
+        </motion.div>
       </div>
     </section>
   );
