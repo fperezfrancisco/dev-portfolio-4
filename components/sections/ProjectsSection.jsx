@@ -1,5 +1,10 @@
 "use client";
-import { ArrowUpRightSquareIcon, ChevronRight, X } from "lucide-react";
+import {
+  ArrowUpRightSquareIcon,
+  ChevronRight,
+  GithubIcon,
+  X,
+} from "lucide-react";
 import React, { useState } from "react";
 import { motion } from "motion/react";
 
@@ -188,14 +193,29 @@ const DesktopProject = ({ project }) => {
           ))}
              */}
           <p className="text-sm">{project.details}</p>
-          <a
-            target="_blank"
-            href={project.liveUrl}
-            className="text-white hover:text-[var(--accent)] flex items-center gap-2 text-sm font-medium mt-4"
-          >
-            Live Url
-            <ArrowUpRightSquareIcon className="size-4" />
-          </a>
+          <div className="flex items-center gap-4">
+            {project.liveUrl && (
+              <a
+                target="_blank"
+                href={project.liveUrl}
+                className="text-white hover:text-[var(--accent)] flex items-center gap-2 text-sm font-medium mt-4"
+              >
+                Live Url
+                <ArrowUpRightSquareIcon className="size-4" />
+              </a>
+            )}
+
+            {project.githubUrl && (
+              <a
+                target="_blank"
+                href={project.githubUrl}
+                className="text-white hover:text-[var(--accent)] flex items-center gap-2 text-sm font-medium mt-4"
+              >
+                Github
+                <GithubIcon className="size-4" />
+              </a>
+            )}
+          </div>
         </div>
         <ul className="hidden sm:flex flex-wrap gap-2 mt-4 items-center z-0">
           {project.techStack.map((tech, index) => (
@@ -226,27 +246,34 @@ const ProjectsSection = () => {
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
       ],
       techStack: ["Next.js", "React native", "Node", "Express", "Mongo Db"],
-      imageUrl: "",
+      imageUrl: "/images/FITFORGE.png",
       imageUrlSmall: "",
       liveUrl: "",
       githubUrl: "",
     },
     {
       id: 2,
-      name: "Trilogy Soccer Online Academy",
+      name: "Disney Plus Clone",
       featured: true,
       details:
-        "Built a full-stack e-learning platform for a soccer academy, featuring user authentication, course management, and video streaming. Developed with React.js, Node.js, Express, and MongoDB.",
+        "Built a fully responsive Disney Plus clone using React js, Tailwind css, the MovieDB Api, Context API, Firebase for authentication and Firestore for the database. Users can sign up, log in, and view trending movie and show details from the MovieDB API. Users can additionally save media to their watchlist.",
       bullets: [
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
         "Built responsive landing pages, authentication flows, and dashboards using React.js, Next.js, Tailwind CSS, and Firebase.",
       ],
-      techStack: ["Next.js", "React native", "Node", "Express", "Mongo Db"],
-      imageUrl: "",
+      techStack: [
+        "React js",
+        "Tailwind CSS",
+        "Firebase v9",
+        "the MovieDB API",
+        "Context API",
+        "GitHub",
+      ],
+      imageUrl: "/images/DisneyPlus.png",
       imageUrlSmall: "",
-      liveUrl: "",
-      githubUrl: "",
+      liveUrl: "https://fperezfrancisco.github.io/disney-plus-clone/",
+      githubUrl: "https://github.com/fperezfrancisco/disney-plus-clone",
     },
     {
       id: 3,
